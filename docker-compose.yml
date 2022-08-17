@@ -1,0 +1,25 @@
+version: "3.10"
+
+services:
+  db:
+    image: postgres
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=menu
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=hesoyam473
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    environment:
+      - POSTGRES_NAME=menu
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=hesoyam473
+    depends_on:
+      - db
+

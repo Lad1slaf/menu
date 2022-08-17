@@ -17,6 +17,11 @@ class RestaurantOwnerOrReadOnly(BasePermission):
             return request.user.is_authenticated
 
 
+class RestaurantOwner(BasePermission):
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and request.user.role == 'Restaurant'
+
+
 class MenuAuthorOrReadOnly(BasePermission):
     def has_object_permission(self, request, view, obj):
         try:

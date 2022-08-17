@@ -7,7 +7,7 @@ from rest_framework.response import Response
 
 from .models import Restaurant, Menu, Vote
 from .permissions import IsRestaurantAdminOrReadOnly, RestaurantOwnerOrReadOnly, MenuAuthorOrReadOnly, IsEmployee, \
-    IsCurrentEmployee
+    IsCurrentEmployee, RestaurantOwner
 from .serializers import RestaurantSerializer, MenuSerializer, VoteSerializer, ResultsSerializer, RegisterSerializer, \
     UserSerializer
 
@@ -30,7 +30,7 @@ class RestaurantDetailAPIView(RetrieveUpdateDestroyAPIView):
 class MenuListAPIView(ListCreateAPIView):
     queryset = Menu.objects.all()
     serializer_class = MenuSerializer
-    permission_classes = [IsRestaurantAdminOrReadOnly]
+    permission_classes = [RestaurantOwner]
 
     def perform_create(self, serializer):
         serializer.save(restaurant=self.request.user.restaurant_admin)
@@ -58,7 +58,7 @@ class VoteDetailAPIView(RetrieveUpdateDestroyAPIView):
 
 
 class ResultListAPIView(ListAPIView):
-    queryset = sorted(Menu.objects.filter(date=datetime.date.today()), key=lambda t: t.vote_count)
+    queryset = Menu.objects.filter(date=datetime.date.today())
     serializer_class = ResultsSerializer
     permission_classes = [IsAuthenticated]
 

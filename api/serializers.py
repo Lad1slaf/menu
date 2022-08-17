@@ -16,7 +16,7 @@ class RestaurantSerializer(serializers.ModelSerializer):
 
             return instance
         except:
-            raise ValidationError('ERROR: You already create Restaurant')
+            raise ValidationError('ERROR: You already created Restaurant')
 
     class Meta:
         model = Restaurant
@@ -35,7 +35,7 @@ class MenuSerializer(serializers.ModelSerializer):
         today_menus = Menu.objects.filter(
             Q(date=datetime.date.today()) & Q(restaurant=self.context['request'].user.restaurant_admin))
         if today_menus:
-            raise ValidationError("Your restaurant are already add menu at that day")
+            raise ValidationError("Your restaurant are already added menu at that day")
         menu.save()
         return menu
 
@@ -52,7 +52,7 @@ class VoteSerializer(serializers.ModelSerializer):
         vote = Vote(**validated_data)
         voted = Vote.objects.filter(Q(date=datetime.date.today()) & Q(user=self.context['request'].user))
         if voted:
-            raise ValidationError("You are already vote today. You can change your vote: change_vote/<int:pk>")
+            raise ValidationError("You are already voted today. You can change your vote: change_vote/<int:pk>")
         vote.save()
         return vote
 
