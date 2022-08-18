@@ -1,9 +1,8 @@
-from rest_framework.fields import CurrentUserDefault, ReadOnlyField
-from rest_framework import serializers, validators
-from rest_framework.exceptions import ValidationError
-from django.db.models import Q
 import datetime
-from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
+
+from django.db.models import Q
+from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from .models import Restaurant, Menu, Vote, CustomUser
 
@@ -65,7 +64,6 @@ class ResultsSerializer(serializers.ModelSerializer):
         fields = ('pk', 'vote_count', 'restaurant', 'menu', 'date')
 
 
-# Register serializer
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
@@ -81,7 +79,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         return user
 
 
-# User serializer
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser

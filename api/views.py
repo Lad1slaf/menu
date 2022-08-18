@@ -1,7 +1,7 @@
 import datetime
 
 from rest_framework import generics
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView, CreateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
@@ -12,7 +12,10 @@ from .serializers import RestaurantSerializer, MenuSerializer, VoteSerializer, R
     UserSerializer
 
 
-class RestaurantListAPIView(ListCreateAPIView):
+class RestaurantListAPIView(CreateAPIView):
+    """
+    Create restaurant
+    """
     queryset = Restaurant.objects.all()
     serializer_class = RestaurantSerializer
     permission_classes = [IsRestaurantAdminOrReadOnly]
@@ -22,12 +25,18 @@ class RestaurantListAPIView(ListCreateAPIView):
 
 
 class RestaurantDetailAPIView(RetrieveUpdateDestroyAPIView):
+    """
+    View restaurant detail or update restaurant data
+    """
     queryset = Restaurant.objects.all()
     serializer_class = RestaurantSerializer
     permission_classes = [RestaurantOwnerOrReadOnly]
 
 
 class MenuListAPIView(ListCreateAPIView):
+    """
+    Create menu or see list of menus
+    """
     queryset = Menu.objects.all()
     serializer_class = MenuSerializer
     permission_classes = [RestaurantOwner]
@@ -37,12 +46,18 @@ class MenuListAPIView(ListCreateAPIView):
 
 
 class MenuDetailAPIView(RetrieveUpdateDestroyAPIView):
+    """
+    View menu detail or update menu data
+    """
     queryset = Menu.objects.all()
     serializer_class = MenuSerializer
     permission_classes = [MenuAuthorOrReadOnly]
 
 
-class VoteListAPIView(ListCreateAPIView):
+class VoteListAPIView(CreateAPIView):
+    """
+    Vote for today menu
+    """
     queryset = Vote.objects.all()
     serializer_class = VoteSerializer
     permission_classes = [IsEmployee]
@@ -52,19 +67,27 @@ class VoteListAPIView(ListCreateAPIView):
 
 
 class VoteDetailAPIView(RetrieveUpdateDestroyAPIView):
+    """
+    Change your vote
+    """
     queryset = Vote.objects.all()
     serializer_class = VoteSerializer
     permission_classes = [IsCurrentEmployee]
 
 
 class ResultListAPIView(ListAPIView):
+    """
+    Getting current day menu with current vote count
+    """
     queryset = Menu.objects.filter(date=datetime.date.today())
     serializer_class = ResultsSerializer
     permission_classes = [IsAuthenticated]
 
 
-# Register API
 class RegisterApi(generics.GenericAPIView):
+    """
+    Register API
+    """
     serializer_class = RegisterSerializer
 
     def post(self, request, *args, **kwargs):
